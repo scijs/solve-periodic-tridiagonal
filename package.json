@@ -1,0 +1,38 @@
+{
+  "name": "solve-periodic-tridiagonal",
+  "version": "1.0.0",
+  "description": "Solve a system of linear periodic tridiagonal equations",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && mocha test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scijs/solve-periodic-tridiagonal.git"
+  },
+  "keywords": [
+    "scijs",
+    "\"linear",
+    "algebra\"",
+    "tridiagonal"
+  ],
+  "author": "Ricky Reusser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scijs/solve-periodic-tridiagonal/issues"
+  },
+  "homepage": "https://github.com/scijs/solve-periodic-tridiagonal#readme",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "iota-array": "^1.0.0",
+    "mocha": "^2.3.4",
+    "ndarray": "^1.0.18",
+    "ndarray-band": "^1.0.14",
+    "ndarray-lup-factorization": "^3.0.2",
+    "ndarray-lup-solve": "^1.1.0",
+    "ndarray-ops": "^1.2.2",
+    "ndarray-scratch": "^1.2.0",
+    "ndarray-tests": "^1.3.0",
+    "standard": "^5.4.1"
+  }
+}

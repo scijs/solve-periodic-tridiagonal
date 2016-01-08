@@ -1,0 +1,103 @@
+# solve-periodic-tridiagonal [![Build Status](https://travis-ci.org/scijs/solve-periodic-tridiagonal.svg)](https://travis-ci.org/scijs/solve-periodic-tridiagonal) [![npm version](https://badge.fury.io/js/solve-periodic-tridiagonal.svg)](https://badge.fury.io/js/solve-periodic-tridiagonal) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
+> Solve a system of linear tridiagonal equations
+
+## Introduction
+
+This module accepts javascript Arrays or typed arrays representing the bands of a periodic tridiagonal matrix and computes the solution using the [Thomas algorithm](http://www.cfd-online.com/Wiki/Tridiagonal_matrix_algorithm_-_TDMA_(Thomas_algorithm)). The problem in matrix form is
+
+$$
+\left[
+\begin{matrix}
+   {b_0} & {c_0} & {   } & {   } & { a_0 } \\
+   {a_1} & {b_1} & {c_1} & {   } & {   } \\
+   {   } & {a_2} & {b_2} & \cdot & {   } \\
+   {   } & {   } & \cdot & \cdot & {c_{n-2}}\\
+   { c_{n-1} } & {   } & {   } & {a_{n-1}} & {b_{n-1}}\\
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+   {x_0 }  \\
+   {x_1 }  \\
+   \cdot   \\
+   \cdot   \\
+   {x_{n-1} }  \\
+\end{matrix}
+\right]
+=
+\left[
+\begin{matrix}
+   {d_0 }  \\
+   {d_1 }  \\
+   \cdot   \\
+   \cdot   \\
+   {d_{n-1} }  \\
+\end{matrix}
+\right].
+$$
+
+The solver will fail if the matrix is singular and may not succeed if the matrix is not diagonally dominant. If the solver fails, it will log a console message and return false.
+
+## Example
+
+Consider the solution of
+
+$$
+\left[
+\begin{matrix}
+   2 & 1 &  0  & 7\\
+  -1 & 7 &  4  & 0\\
+   0 & 2 & -3  & 2\\
+   6 & 0 &  1  & 8\\
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+   {x_0 }  \\
+   {x_1 }  \\
+   {x_2 }  \\
+   {x_3 }  \\
+\end{matrix}
+\right]
+=
+\left[
+\begin{matrix}
+   {32}  \\
+   {25}  \\
+   {-5}  \\
+   {41}  \\
+\end{matrix}
+\right].
+$$
+
+```javascript
+var triper = require('solve-periodic-tridiagonal')
+
+var d = [32, 25, 3, 41]
+
+triper(4, [7, -1, 2, 1], [2, 7, -3, 8], [1, 4, 2, 6], d, [])
+// => d = [ 1, 2, 3, 4 ]
+```
+
+## Installation
+
+```javascript
+$ npm install solve-periodic-tridiagonal
+```
+
+## API
+
+#### `require('solve-periodic-tridiagonal')(n, a, b, c, d, w)`
+**Arguments**:
+- `n`: an integer representing the number of equations in the system
+- `a`: a javascript `Array` or typed array of length n representing the subdiagonal, indexed according to the equation above. Left unchanged by the solver.
+- `b`: a javascript `Array` or typed array of length n representing the diagonal, indexed as above. This vector is modified by the solver.
+- `c`: a javascript `Array` or typed array of length n representing the superdiagonal, indexed as above. This vector is modified by the solver.
+- `d`: a javascript `Array` or typed array of length n representing the known vector d. On successful completion, this vector will contain the solution.
+- `w`: a work vector. Must be a javascript `Array` or typed array of length n.
+
+**Returns**: True on successful completion, false otherwise.
+
+## License
+&copy; 2016 Ricky Reusser. MIT License.

@@ -1,0 +1,42 @@
+I didn't have paper or pencil when deriving this, so here it is. This was pretty slow, but
+
+So we want to solve:
+
+   [ b[0]  c[0]                         a[0]   ] [ x[0]   ]   [ q[0]   ]
+   [ a[1]  b[1]  c[1]                          ] [ x[1]   ]   [ q[1]   ]
+   [                                           ] [        ]   [        ]
+   [                    b[n-3]  c[n-3]         ] [ x[n-3] ] = [ q[n-3] ]
+   [                    a[n-2]  b[n-2]  c[n-2] ] [ x[n-2] ]   [ q[n-2] ]
+   [ c[n-1]                     a[n-1]  b[n-1] ] [ x[n-1] ]   [ q[n-1] ]
+
+
+Removing the last row and column, we're left with:
+
+   [ b[0]  c[0]                               ] [ x[0]   ]   [ q[0]   ]   [ b[0]   ]
+   [ a[1]  b[1]  c[1]    .                    ] [ x[1]   ]   [ q[1]   ]   [ 0      ]
+   [              .      .      .             ] [        ] = [        ] - [ 0      ] * x[n-1]
+   [                     .    b[n-3]  c[n-3]  ] [ x[n-3] ]   [ q[n-3] ]   [ 0      ]
+   [                          a[n-2]  b[n-2]  ] [ x[n-2] ]   [ q[n-2] ]   [ c[n-2] ]
+
+Then using linearity, write:
+
+    x = x(1) + x(2) * x[n-1]
+
+Solve these two system in parallel, where Ac represents the condensed system::
+
+    [ Ac ] * [ x(1) ] = [ q ]
+    [ Ac ] * [ x(2) ] = [ -b[0] ... -c[n-1] ]^T
+
+Then to solve for x[n-1] as required to compute x,
+
+    c[n-1] * x[0] + a[n-1] * x[n-2] + b[n-1] * x[n-1] = q[n-1]
+
+    c[n-1] * (x(1)[0]+ x(2)[0] * x[n-1]) + a[n-1] * (x(1)[n-2] + x(2)[n-2] * x[n-1]) + b[n-1] * x[n-1] = q[n-1]
+
+    c[n-1] * x(1)[0] + c[n-1] * x(2)[0] * x[n-1] + a[n-1] * x(1)[n-2] + a[n-1] * x(2)[n-2] * x[n-1] + b[n-1] * x[n-1] = q[n-1]
+
+    x[n-1] = (q[n-1] - c[n-1] * x(1)[0] - a[n-2] * x(1)[n-2]) / (c[n-1] * x(2)[0] + a[n-1] * x(2)[n-2] + b[n-1])
+
+              q[n-1] - c[n-1] * x(1)[0] - a[n-2] * x(1)[n-2]
+    x[n-1] = ------------------------------------------------
+              b[n-1] + c[n-1] * x(2)[0] + a[n-1] * x(2)[n-2]
